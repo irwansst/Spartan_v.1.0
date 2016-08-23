@@ -1,0 +1,164 @@
+<?php
+session_start();
+ if (empty($_SESSION['username']) AND empty($_SESSION['passuser'])){
+  echo "<link href='style.css' rel='stylesheet' type='text/css'>
+ <center>Untuk mengakses modul, Anda harus login <br>";
+  echo "<a href=../../index.php><b>LOGIN</b></a></center>";
+}
+else{
+$aksi="modul/mod_sMasuk/aksi_sMasuk.php";
+
+switch($_GET[act]){
+  
+  default:
+  
+    echo "<h1>Surat Masuk periode $_SESSION[periode]</h1>";
+    
+	echo "<input type=button class='button' value='Tambah Data' onclick=location.href='?op=sMasuk&act=tambahsMasuk'><br><br>";
+	
+	echo "
+	<div class='demo_jui'>
+	<table cellpadding='0' cellspacing='0' border='0' class='display' id='example'>
+		<thead>
+			<tr>
+				<th width=20px align=center>No</th>
+				<th >Jenis Surat</th>
+				<th >Nomor Surat</th>
+				<th width=80px>Tanggal Surat</th>
+				<th width=80px>Tanggal <br>Surat Masuk</th>
+				<th>Dari</th>
+				<th>Perihal</th>
+				<th>Disposisi</th>
+				<th>Keterangan</th>
+				<th width=140px>Stamp</th>
+				<th width=50px>Lihat/<br>Ubah</th>
+			</tr>
+		</thead>
+		<tbody>";
+		
+	$no=1;
+    $tampil	= mysql_query("SELECT * FROM smasuk WHERE  periode='$_SESSION[periode]' ORDER BY tMasuk DESC");
+    while ($r=mysql_fetch_array($tampil)){
+	
+       echo "<tr>
+			 <td align=center>$no</td>
+			 <td align=center>$r[jSurat]</td>
+             <td align=right>$r[nSurat]</td>
+             <td align=center>$r[tSurat]</td>
+             <td align=center>$r[tMasuk]</td>
+             <td>$r[dari]</td>
+             <td>$r[hal]</td>
+             <td>$r[dispo]</td>
+		     <td>$r[ket]</td>
+		     <td align=center>$r[stamp]</td>
+             <td align=center>
+			 <a href=?op=sMasuk&act=lihatsMasuk&id=$r[id_sMasuk]><img src='images/show.png' border='0'></a>
+			 <a href=?op=sMasuk&act=editsMasuk&id=$r[id_sMasuk]><img src='images/edit.png' border='0'></a>
+	         </td>
+			 </tr>";
+      $no++;
+    }	
+		echo"</tbody></table></div><div class='spacer'></div>";
+	
+  break;
+
+  
+  case "tambahsMasuk":
+      echo "<h1>Tambah SURAT MASUK</h1>
+			<div class='line'></div>
+			<div class='box'>";
+    echo "	
+	        <form method=POST action='$aksi?op=sMasuk&act=input'>
+			<label><span>TANGGAL REKAM			</span><input type='text' value='".tgl_indo(date("Y m d"))."' size='15' style='text-align:right;' disabled></label>
+			<label><span>JENIS SURAT</span>";
+		    echo  "<select name='jsurat'>
+            <option value=0 selected>- JENIS SURAT -</option>";
+            $tampil=mysql_query("SELECT * FROM jenis ORDER BY kodejenis ASC");
+            while($t=mysql_fetch_array($tampil)){
+            echo "<option value=$t[kodejenis]>$t[kodejenis]</option>";
+            }
+		  echo "</select></label>
+			<label><span>NOMOR SURAT			</span><input type='text' name='nsurat' size='40'></label>
+			<label><span>TANGGAL SURAT			</span><input type='text' name='tsurat' id='datepicker' size='15'></label>
+			<label><span>SURAT DITERIMA DARI	</span><input type='text' name='dari' size='80'></label>
+			<label><span>PERIHAL SURAT			</span><input type='text' name='hal' size='70'></label>
+			<label><span>DISPOSISI SURAT KEPADA	</span><input type='text' name='dispo' size='70'></label>
+			<label><span>KETERANGAN				</span><input type='text' name='ket' size='80'></label>
+		
+		<input type=submit class=button value=Simpan>
+		<input type=button value=Batal class=button onclick=self.history.back()>
+          </form></div>";
+
+    break;
+  
+
+  case "editsMasuk":
+    $edit = mysql_query("SELECT * FROM sMasuk WHERE id_sMasuk='$_GET[id]'");
+    $r    = mysql_fetch_array($edit);
+	
+	
+	echo "<h1>Ubah sMasuk</h1>
+			<div class='line'></div>
+			<div class='box'>";
+    echo "
+        <form method=POST action=$aksi?op=sMasuk&act=update>
+        <input type=hidden name=id value=$r[id_sMasuk]>
+		
+		<label><span>TANGGAL SURAT MASUK	</span><input type='text' value='".tgl_indo(date("Y m d"))."' size='15' style='text-align:right;' disabled></label>
+		
+		<label><span>JENIS SURAT</span>";
+		    echo  "<select name='jsurat'>
+            <option value=0 selected>- JENIS SURAT -</option>";
+            $tampil=mysql_query("SELECT * FROM jenis ORDER BY kodejenis ASC");
+            while($t=mysql_fetch_array($tampil)){
+            echo "<option value=$t[kodejenis]>$t[kodejenis]</option>";
+            }
+		  echo "</select></label>
+		
+		<label><span>NOMOR SURAT			</span><input type='text' name='nsurat' value='$r[nSurat]' size='40'></label>
+		<label><span>TANGGAL SURAT			</span><input type='text' name='tsurat' value='$r[tSurat]' id='datepicker' size='15'></label>
+		<label><span>SURAT DITERIMA DARI	</span><input type='text' name='dari' value='$r[dari]' size='80'></label>
+		<label><span>PERIHAL SURAT			</span><input type='text' name='hal' value='$r[hal]' size='70'></label>
+		<label><span>DISPOSISI SURAT KEPADA	</span><input type='text' name='dispo' value='$r[dispo]' size='70'></label>
+		<label><span>KETERANGAN				</span><input type='text' name='ket' value='$r[ket]' size='80'></label>
+	 
+		<input type=submit class=button value=Update>
+        <input type=button class=button value=Batal onclick=self.history.back()></td></tr>
+        </form></div>";
+    break;
+	
+	case "lihatsMasuk":
+    $edit = mysql_query("SELECT * FROM sMasuk WHERE id_sMasuk='$_GET[id]'");
+    $r    = mysql_fetch_array($edit);
+	
+	$tgl	= tgl_indo($r[tSurat]);
+	$tgl1	= tgl_indo($r[tMasuk]);
+	
+	
+	echo "<h1>Detail Informasi</h1>
+			<div class='line'></div>
+			<div class='box'>";
+			
+    echo "
+          <form method=POST action=$aksi?op=sMasuk&act=update>
+                   
+		  <label><span>TERAKHIR DIBUAT/UPDATE</span>: <b>$r[stamp]</b></label>
+		  <label><span>PERIODE</span>: <b>$r[periode]</b></label><br>
+
+		  <label><span>NOMOR SURAT</span>: <b>".$r[nSurat]."</b></label>
+		  <label><span>TANGGAL SURAT</span>: $tgl</label><br>
+		  
+		  <label><span>TANGGAL SURAT DITERIMA</span>: $tgl1</label>
+		  <label><span>SURAT DARI </span>: $r[dari]</label>
+		  <label><span>PERIHAL SURAT</span>: $r[hal]</label>
+		  <label><span>SURAT DITUJUKAN KEPADA</span>: $r[dispo]</label>
+		  <label><span>KETERANGAN SURAT</span>: $r[ket]</label>
+		  
+         
+
+          <br><br><input type=button class=button value=Kembali onclick=self.history.back()></td></tr>
+          </form></div>";
+    break;  
+}
+}
+?>

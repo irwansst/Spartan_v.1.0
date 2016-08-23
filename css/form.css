@@ -1,0 +1,64 @@
+div.box {
+margin-top: 10px;
+}
+div.box label {
+    
+width:100%;
+display: block;
+padding:2px 0 2px 0;
+padding-top:2px;
+
+}
+
+div.box label span {
+display: block;
+float:left;
+width:200px;
+text-align:left;
+padding:2px 2px 0 0;
+
+}
+
+div.box input{
+	height: 30px;
+}
+div.box textarea{
+
+}
+div.box select{
+	height: 30px;
+}
+
+
+div.box input.submit {
+margin-top: 10px;
+margin-bottom: 10px;
+width: 25%;
+background: #809db5;
+color: #fff;
+padding: 1px 0;
+font-size: 1em;
+height: 28px;
+
+}
+
+div.box  input.submit:hover,
+div.box  input.submit:focus {
+background: #57ab44;
+}
+
+div.box label input,
+div.box label select,
+div.box label textarea {
+
+display: block;
+border: 1px solid #d0d6da;
+border-left: 3px solid #809db5;
+background: #e9edf0;
+padding: 4px;
+font-family: sans-serif; font-size: 1em;
+box-sizing: border-box;
+-moz-box-sizing: border-box; /* gecko */
+-webkit-box-sizing: border-box; /* khtml/webkit */
+-ms-box-sizing: border-box; /* IE */
+}
