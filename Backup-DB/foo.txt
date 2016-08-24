@@ -1,1 +1,1 @@
-
+Folder ini berisi kumpulan file backup database dari Aplikasi SPARTAN
