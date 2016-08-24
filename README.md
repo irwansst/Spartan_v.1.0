@@ -2,10 +2,10 @@
 Aplikasi Sistem Penatausahaan Arsip dan Persuratan
 
 Pengkode : 
-    Nama    : Irwan Susanto
-    Email   : irwan.sst@gmail.com
-    Twitter : @irwan_sst
-    Kerja   : Kantor Wilayah Ditjen Perbendaharaan Provinsi Kalimantan Tengah
+- Nama    : Irwan Susanto
+- Email   : irwan.sst@gmail.com
+- Twitter : @irwan_sst
+- Kerja   : Kantor Wilayah Ditjen Perbendaharaan Provinsi Kalimantan Tengah
     
     
 Tujuan:
